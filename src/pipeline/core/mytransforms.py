@@ -68,6 +68,7 @@ def _crop(img, i, j, h, w):
 def _center_crop(img, output_size):
     if isinstance(output_size, numbers.Number):
         output_size = (int(output_size), int(output_size))
+    # print(img.size)
     w, h = img.size
     th, tw = output_size
     i = int(round((h - th) / 2.))
@@ -76,35 +77,16 @@ def _center_crop(img, output_size):
 
 
 def five_crop(img, size):
-    """Crop the given PIL Image into four corners and the central crop.
-    .. Note::
-        This transform returns a tuple of images and there may be a
-        mismatch in the number of inputs and targets your ``Dataset`` returns.
-    Args:
-       size (sequence or int): Desired output size of the crop. If size is an
-           int instead of sequence like (h, w), a square crop (size, size) is
-           made.
-    Returns:
-        tuple: tuple (tl, tr, bl, br, center) corresponding top left,
-            top right, bottom left, bottom right and center crop.
-    """
-    if isinstance(size, numbers.Number):
-        size = (int(size), int(size))
-    else:
-        assert len(
-            size) == 2, "Please provide only two dimensions (h, w) for size."
-    w, h = img.size
-    crop_h, crop_w = size
-    if crop_w > w or crop_h > h:
+    h, w, c = img.shape
+    assert c == 3, 'Something wrong with channels order'
+    if size > w or size > h:
         raise ValueError(
-            "Requested crop size {} is bigger than input size {}".format(size,
-                                                                         (h,
-                                                                          w)))
-    tl = img.crop((0, 0, crop_w, crop_h))
-    tr = img.crop((w - crop_w, 0, w, crop_h))
-    bl = img.crop((0, h - crop_h, crop_w, h))
-    br = img.crop((w - crop_w, h - crop_h, w, h))
-    center = _center_crop(img, (crop_h, crop_w))
+            "Requested crop size {} is bigger than input size {}".format(size, (h, w)))
+    tl = img[0: size, 0: size]
+    tr = img[0: size, w - size: w]
+    bl = img[h - size: h, 0: size]
+    br = img[h - size: h, w - size: w]
+    center = OpenCVCenterCrop(size)(img)
     return tl, tr, bl, br, center
 
 

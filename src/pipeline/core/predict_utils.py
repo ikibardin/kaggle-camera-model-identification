@@ -12,7 +12,7 @@ from tqdm import tqdm
 from . import utils
 from . import train_utils
 from .mytransforms import five_crop
-from ... import mymodels
+from ..mymodels import densenet, dpn
 
 
 def get_batches(img_path, use_tta, crop_size):
@@ -67,9 +67,9 @@ def predict_test_proba(model, test_folder, use_tta, crop_size):
 def make_model(weights_name, weights_dir):
     model_name = weights_name.split('_')[0]
     if model_name == 'densenet161':
-        model = mymodels.densenet.densenet161(num_classes=len(utils.CLASSES), pretrained=False)
+        model = densenet.densenet161(num_classes=len(utils.CLASSES), pretrained=False)
     elif model_name == 'dpn92':
-        model = mymodels.dpn.dpn92(num_classes=len(utils.CLASSES), pretrained=None)
+        model = dpn.dpn92(num_classes=len(utils.CLASSES), pretrained=None)
     else:
         raise RuntimeError('Unknown model')
     model = nn.DataParallel(model).cuda()

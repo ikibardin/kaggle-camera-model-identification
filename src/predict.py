@@ -1,7 +1,7 @@
 import argparse
 import pandas as pd
 
-from core import predict_utils
+from pipeline.core import predict_utils
 
 WEIGHTS_DIR = '../weights'
 
@@ -18,10 +18,9 @@ def main():
     parser.add_argument('-b', '--batch-size', type=int, default=8, help='Batch Size during training, e.g. -b 64')
     parser.add_argument('-d', '--dir', type=str, help='Directory with images to predict')
     parser.add_argument('-o', '--output', type=str, help='Path for output file')
-
     args = parser.parse_args()
-
     predicts = []
+
     for i, weight in enumerate(WEIGHTS):
         print('{}. Loading model {}'.format(i, weight))
         model = predict_utils.make_model(weights_name=weight, weights_dir=WEIGHTS_DIR)
@@ -32,7 +31,7 @@ def main():
         'fname': final_proba['fname'],
         'camera': cameras
     })
-    submission.to_csv(parser.output, index=False)
+    submission.to_csv(args.output, index=False)
 
 
 if __name__ == '__main__':
