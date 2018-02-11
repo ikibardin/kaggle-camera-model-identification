@@ -15,7 +15,6 @@ WEIGHTS = ['densenet161_28_0.08377413648371115.pth',
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('-b', '--batch-size', type=int, default=8, help='Batch Size during training, e.g. -b 64')
     parser.add_argument('-d', '--dir', type=str, help='Directory with images to predict')
     parser.add_argument('-o', '--output', type=str, help='Path for output file')
     args = parser.parse_args()
