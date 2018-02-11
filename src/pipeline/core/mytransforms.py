@@ -75,7 +75,7 @@ def _center_crop(img, output_size):
     return _crop(img, i, j, th, tw)
 
 
-def _five_crop(img, size):
+def five_crop(img, size):
     """Crop the given PIL Image into four corners and the central crop.
     .. Note::
         This transform returns a tuple of images and there may be a
@@ -492,7 +492,7 @@ class FiveCropWithD4TTA(object):
 
     def __call__(self, img):
         res = []
-        crops = _five_crop(img, self._size)
+        crops = five_crop(img, self._size)
         for crop in crops:
             res += _full_d4(np.array(crop))
         return res
