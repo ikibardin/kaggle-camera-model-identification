@@ -4,5 +4,7 @@ Implementation of camera model identification system by team "[ods.ai] GPU_muscl
 competition "IEEE's Signal Processing Society - Camera Model Identification" and 1st place among student eligible
 teams).
 
-To execute the camera model identification system run the following command:
+To execute the camera model identification system run the following command from the root of the directory:
+
 `python src/predict.py -d <directory with test images> -o <name for predictions file>`
+

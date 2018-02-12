@@ -3,7 +3,7 @@ import pandas as pd
 
 from pipeline.core import predict_utils
 
-WEIGHTS_DIR = '../weights'
+WEIGHTS_DIR = 'weights'
 
 WEIGHTS = ['densenet161_28_0.08377413648371115.pth',
            'densenet161_55_0.08159203971706519.pth',
