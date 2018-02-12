@@ -21,7 +21,7 @@ def main():
     predicts = []
 
     for i, weight in enumerate(WEIGHTS):
-        print('{}. Loading model {}'.format(i, weight))
+        print('{}. Predicting with model {}'.format(i, weight))
         model = predict_utils.make_model(weights_name=weight, weights_dir=WEIGHTS_DIR)
         predicts.append(predict_utils.predict_test_proba(model, args.dir, use_tta=True, crop_size=480))
     final_proba = predict_utils.get_gmeaned(predicts)
