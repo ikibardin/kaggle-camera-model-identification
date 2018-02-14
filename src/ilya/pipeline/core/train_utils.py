@@ -1,19 +1,15 @@
 import os
 import logging
-from tqdm import tqdm
-
-import random
 import numpy as np
-import pandas as pd
 
 import torch
-import torch.nn.functional as F
+import torch.nn as nn
 
 from . import utils
+from ..mymodels import densenet, dpn
+from .. import config
 
 cuda_is_available = torch.cuda.is_available()
-
-INIT_CYCLIC_LR = 2e-5
 
 
 def cyclic_lr(epoch, init_lr, num_epochs_per_cycle=10, cycle_epochs_decay=2, lr_decay_factor=0.5):
@@ -58,38 +54,19 @@ class Tracker(object):
         return self._not_updated_for
 
 
-def train_and_validate(
-        train_data_loader,
-        valid_loaders,
-        model,
-        optimizer,
-        scheduler,
-        loss_fn,
-        epochs,
-        start_epoch,
-        best_val_loss,
-        experiment_name,
-):
+def train_and_validate(train_data_loader, valid_loaders, model, optimizer,
+                       scheduler, loss_fn, experiment_name):
     checkpoint_dir = os.getcwd() + '/models/{}'.format(experiment_name)
     os.makedirs(checkpoint_dir, exist_ok=True)
 
     tracker = Tracker()
     cyclic_lr_started = False
     valid_losses = []
-
-    for epoch in range(start_epoch, epochs + 1):
-        train(
-            train_data_loader,
-            model,
-            optimizer,
-            loss_fn,
-            epoch,
-        )
-        val_loss = validate(
-            valid_loaders,
-            model,
-            loss_fn,
-        )
+    epoch = 1
+    while True:
+        train(train_data_loader, model,
+              optimizer, loss_fn, epoch)
+        val_loss = validate(valid_loaders, model, loss_fn)
         valid_losses.append(val_loss)
 
         if tracker.should_save(val_loss):
@@ -99,20 +76,28 @@ def train_and_validate(
                 'optimizer': optimizer.state_dict(),
                 'val_loss': val_loss,
             },
-                '{experiment_name}_{epoch}_{val_loss}.pth'.format(experiment_name=experiment_name, epoch=epoch,
-                                                                  val_loss=val_loss),
+                '{experiment_name}_{epoch}_{val_loss}.pth'.format(
+                    experiment_name=experiment_name, epoch=epoch,
+                    val_loss=val_loss),
                 checkpoint_dir,
             )
-        if tracker.not_updated_for() >= 6 and not cyclic_lr_started:
+        if tracker.not_updated_for() >= 8 and not cyclic_lr_started:
             cyclic_lr_started = True
-            optimizer = torch.optim.SGD(model.parameters(), lr=INIT_CYCLIC_LR)
-            print(logging.info('Starting cyclic lr'))
+            init_lr = config.INIT_CYCLIC_LR if 'dpn' not in experiment_name else 1e-4
+            optimizer = torch.optim.SGD(model.parameters(), lr=init_lr)
+            epoch += config.CYCLE_LEN - (epoch % config.CYCLE_LEN) - 1
+            finish_at = epoch + 3 * config.CYCLE_LEN + 1
+            logging.info('Starting cyclic lr with init_lr={}'.format(init_lr))
         if not cyclic_lr_started:
             scheduler.step(val_loss, epoch)
         else:
             for param_group in optimizer.param_groups:
-                new_lr = cyclic_lr(epoch, init_lr=INIT_CYCLIC_LR)
+                new_lr = cyclic_lr(epoch, init_lr=config.INIT_CYCLIC_LR,
+                                   num_epochs_per_cycle=config.CYCLE_LEN)
                 param_group['lr'] = new_lr
+        epoch += 1
+        if cyclic_lr_started and epoch == finish_at:
+            break
     return model
 
 
@@ -125,8 +110,6 @@ def train(train_loader, model, optimizer, criterion, epoch):
     logging.info('Epoch: {} | lrs: {}'.format(epoch, lrs))
     for i, (inputs, O, targets) in enumerate(train_loader):
         inputs, O, targets = variable(inputs), variable(O), variable(targets)
-        #print(targets)
-        #print(list(targets))
         outputs = model(inputs, O)
         loss = criterion(outputs, targets)
         optimizer.zero_grad()
@@ -174,26 +157,12 @@ def save_checkpoint(state, filename, checkpoint_dir):
     torch.save(state, filepath)
 
 
-def get_validation_preds(val_loaders, model):
-    dfs = dict()
-    for mode in ('unalt', 'manip'):
-        preds = None
-        labels = []
-
-        model.eval()
-
-        for i, (inputs, O, targets) in tqdm(enumerate(val_loaders[mode])):
-            inputs, O, targets = variable(inputs, volatile=True), variable(O), variable(targets)
-            outputs = model(inputs, O)
-            # print(list(targets))
-            labels += list(targets.data.cpu().numpy().flatten())
-            prediction = torch.nn.functional.softmax(outputs).data.cpu().numpy()
-            preds = np.vstack([preds, prediction]) \
-                if preds is not None else prediction
-        labels = np.array(labels)
-        print(preds.shape, labels.shape)
-        
-        df_data = np.append(preds, np.array(labels, copy=False, subok=True, ndmin=2).T, axis=1)
-        dfs[mode] = pd.DataFrame(data=df_data, columns=utils.CLASSES + ['labels'])
-
-    return dfs
+def make_model(model_name):
+    if model_name == 'densenet161':
+        model = densenet.densenet161(num_classes=len(utils.CLASSES), pretrained=True)
+    elif model_name == 'dpn92':
+        model = dpn.dpn92(num_classes=len(utils.CLASSES), pretrained='imagenet')
+    else:
+        raise RuntimeError('Unknown model')
+    model = nn.DataParallel(model).cuda()
+    return model

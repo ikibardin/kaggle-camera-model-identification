@@ -3,7 +3,7 @@ import pandas as pd
 
 from pipeline.core import predict_utils
 
-WEIGHTS_DIR = 'weights'
+WEIGHTS_DIR = '../../weights'
 
 WEIGHTS = ['densenet161_28_0.08377413648371115.pth',
            'densenet161_55_0.08159203971706519.pth',
@@ -19,7 +19,7 @@ def main():
     parser.add_argument('-o', '--output', type=str, help='Path for output file')
     args = parser.parse_args()
     predicts = []
-
+    print('Generating final submission for test directory at {}'.format(args.dir))
     for i, weight in enumerate(WEIGHTS):
         print('{}. Predicting with model {}'.format(i, weight))
         model = predict_utils.make_model(weights_name=weight, weights_dir=WEIGHTS_DIR)
@@ -31,6 +31,7 @@ def main():
         'camera': cameras
     })
     submission.to_csv(args.output, index=False)
+    print('Final submission saved to {}'.format(args.output))
 
 
 if __name__ == '__main__':
