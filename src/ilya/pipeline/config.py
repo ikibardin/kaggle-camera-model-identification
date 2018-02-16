@@ -16,6 +16,9 @@ INITIAL_LR = 1e-4
 PATIENCE = 3
 NUM_WORKERS = 8
 
+
+LOGS_DIR = '../../logs'
+
 CONFIG_LOG_MESSAGE = 'crop_size={}; steps={}; initial_lr={}; patience={}; \'' \
                      'n_workers={}; use_d4={}'
 

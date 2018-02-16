@@ -83,8 +83,8 @@ def train_model(model_name, use_pseudo):
     seed = 42
     np.random.seed(seed)
     random.seed(seed)
-    os.makedirs('logs', exist_ok=True)
-    logging.basicConfig(filename='logs/{}'.format(model_name), level=logging.INFO,
+    os.makedirs(config.LOGS_DIR, exist_ok=True)
+    logging.basicConfig(filename='{}/{}'.format(config.LOGS_DIR, model_name), level=logging.INFO,
                         format='%(asctime)s %(message)s')
     model = train_utils.make_model(model_name)
     ids_train = load_train_ids(use_pseudo)
