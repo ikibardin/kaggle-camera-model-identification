@@ -4,6 +4,7 @@ MODELS = [
     'densenet201',
     'resnext101',
     'densenet161',
+    'se_resnext50',
     'se_resnet50',
     'dpn98',
     'resnext101_d4'

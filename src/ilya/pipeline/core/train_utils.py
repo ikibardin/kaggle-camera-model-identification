@@ -6,7 +6,7 @@ import torch
 import torch.nn as nn
 
 from . import utils
-from ..mymodels import densenet, dpn
+from ..mymodels import densenet, dpn, resnext, se_resnet, seresnext
 from .. import config
 
 cuda_is_available = torch.cuda.is_available()
@@ -158,11 +158,23 @@ def save_checkpoint(state, filename, checkpoint_dir):
 
 
 def make_model(model_name):
-    if model_name == 'densenet161':
-        model = densenet.densenet161(num_classes=len(utils.CLASSES), pretrained=True)
+    if model_name.startswith('densenet201'):
+        model = densenet.densenet201(num_classes=len(utils.CLASSES), pretrained=True)
     elif model_name == 'dpn92':
-        model = dpn.dpn92(num_classes=len(utils.CLASSES), pretrained='imagenet')
+        model = dpn.dpn92(num_classes=len(utils.CLASSES), pretrained='imagenet+5k')
+    elif model_name.startswith('resnext101'):
+        model = resnext.resnext101_32x4d(num_classes=len(utils.CLASSES), pretrained='imagenet')
+    elif model_name == 'densenet161':
+        model = densenet.densenet161(num_classes=len(utils.CLASSES), pretrained=True)
+    elif model_name == 'dpn98':
+        model = dpn.dpn98(num_classes=len(utils.CLASSES), pretrained='imagenet')
+    elif model_name == 'se_resnet50':  # FIXME Add imagenet pretrained weights
+        model = se_resnet.se_resnet50(num_classes=len(utils.CLASSES)).cuda()
+        return model
+    elif model_name == 'se_resnext50':  # FIXME Add imagenet pretrained weights
+        model = seresnext.se_resnext50(num_classes=len(utils.CLASSES), pretrained=True).cuda()
+        return model
     else:
-        raise RuntimeError('Unknown model')
+        raise RuntimeError('Unknown model name: {}'.format(model_name))
     model = nn.DataParallel(model).cuda()
     return model
