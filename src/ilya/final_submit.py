@@ -18,13 +18,11 @@ def main():
     parser.add_argument('-d', '--dir', type=str, help='Directory with images to predict')
     parser.add_argument('-o', '--output', type=str, help='Path for output file')
     args = parser.parse_args()
-    predicts = []
+
+    checkpoints_paths = ['{}/{}'.format(WEIGHTS_DIR, weights_name) for weights_name in WEIGHTS]
+    print('Loaded {} checkpoints'.format(len(checkpoints_paths)))
     print('Generating final submission for test directory at {}'.format(args.dir))
-    for i, weight in enumerate(WEIGHTS):
-        print('{}. Predicting with model {}'.format(i, weight))
-        model = predict_utils.make_model(weights_name=weight, weights_dir=WEIGHTS_DIR)
-        predicts.append(predict_utils.predict_test_proba(model, args.dir, use_tta=True, crop_size=480))
-    final_proba = predict_utils.get_gmeaned(predicts)
+    final_proba = predict_utils.predict_gmean_ensemble(checkpoints_paths, args.dir)
     cameras = final_proba.drop('fname', axis=1).idxmax(axis=1)
     submission = pd.DataFrame({
         'fname': final_proba['fname'],

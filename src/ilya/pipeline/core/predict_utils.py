@@ -44,7 +44,7 @@ def get_batches(img_path, use_tta, crop_size):
 
 
 def predict_test_proba(model, test_folder, use_tta, crop_size):
-    ids = glob.glob(os.path.join(test_folder, '*.tif'))
+    ids = glob.glob(os.path.join('../../' + test_folder, '*.tif'))
     ids.sort()
     model.eval()
     preds = None
@@ -64,8 +64,8 @@ def predict_test_proba(model, test_folder, use_tta, crop_size):
     return df
 
 
-def make_model(weights_name, weights_dir):
-    model_name = weights_name.split('_')[0]
+def make_model(weights_path):
+    model_name = weights_path.split('/')[-1].split('_')[0]
     if model_name == 'densenet161':
         model = densenet.densenet161(num_classes=len(utils.CLASSES), pretrained=False)
     elif model_name == 'dpn92':
@@ -73,7 +73,7 @@ def make_model(weights_name, weights_dir):
     else:
         raise RuntimeError('Unknown model')
     model = nn.DataParallel(model).cuda()
-    state_dict = torch.load('{}/{}'.format(weights_dir, weights_name))['state_dict']
+    state_dict = torch.load(weights_path)['state_dict']
     model.load_state_dict(state_dict)
     return model
 
@@ -89,3 +89,14 @@ def get_gmeaned(arr):
     gm['fname'] = arr[0]['fname']
     gm.columns = arr[0].columns
     return gm
+
+
+def predict_gmean_ensemble(checkpoints_paths, test_dir):
+    predicts = []
+    for i, weights_path in enumerate(checkpoints_paths):
+        print('{}/{}: Predicting with model at {}'.format(i + 1, len(checkpoints_paths),
+                                                          weights_path))
+        model = make_model(weights_path)
+        predicts.append(predict_test_proba(model, test_dir, use_tta=True, crop_size=480))
+    final_proba = get_gmeaned(predicts)
+    return final_proba

@@ -16,7 +16,6 @@ INITIAL_LR = 1e-4
 PATIENCE = 3
 NUM_WORKERS = 8
 
-
 LOGS_DIR = '../../logs'
 
 CONFIG_LOG_MESSAGE = 'crop_size={}; steps={}; initial_lr={}; patience={}; \'' \
@@ -27,5 +26,6 @@ CYCLE_LEN = 10
 
 BATCH_SIZES = {
     'dpn92': 12,
-
 }
+
+CHECKPOINTS_DIR = '../../checkpoints/{}'

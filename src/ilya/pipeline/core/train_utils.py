@@ -56,7 +56,7 @@ class Tracker(object):
 
 def train_and_validate(train_data_loader, valid_loaders, model, optimizer,
                        scheduler, loss_fn, experiment_name):
-    checkpoint_dir = os.getcwd() + '/models/{}'.format(experiment_name)
+    checkpoint_dir = config.CHECKPOINTS_DIR.format(experiment_name)
     os.makedirs(checkpoint_dir, exist_ok=True)
 
     tracker = Tracker()
