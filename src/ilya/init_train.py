@@ -1,5 +1,3 @@
-# densenet201, dpn92, se-resnext50
-
 from pipeline import config
 from pipeline.core.train_core import train_model
 

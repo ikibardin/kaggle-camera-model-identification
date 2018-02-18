@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 set -e
 
 while getopts d:o: option
