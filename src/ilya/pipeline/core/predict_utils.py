@@ -44,7 +44,7 @@ def get_batches(img_path, use_tta, crop_size):
 
 
 def predict_test_proba(model, test_folder, use_tta, crop_size):
-    ids = glob.glob(os.path.join(test_folder, '*.tif'))
+    ids = glob.glob(os.path.join('../../' + test_folder, '*.tif'))
     ids.sort()
     model.eval()
     preds = None
