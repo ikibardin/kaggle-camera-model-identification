@@ -8,7 +8,7 @@ import os
 
 
 folders = os.listdir('links/')
-for i in filders:
+for i in folders:
     cnt = 0
     pd.read_csv('links/'+i)
     img = urllib.request.urlopen(img_url).read()
