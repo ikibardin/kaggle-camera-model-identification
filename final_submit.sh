@@ -12,6 +12,6 @@ done
 
 pushd src
 pushd ilya
-python final_submit.py --dir=$TEST_DIR --output=$OUTPUT_FILE
+python final_submit.py --dir=${TEST_DIR} --output=${OUTPUT_FILE}
 popd
 popd

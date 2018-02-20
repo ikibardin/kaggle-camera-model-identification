@@ -83,6 +83,9 @@ def train_model(model_name, use_pseudo):
     seed = 42
     np.random.seed(seed)
     random.seed(seed)
+    batch_size = config.BATCH_SIZES[model_name]
+    if use_pseudo:
+        model_name += '_pseudo'
     os.makedirs(config.LOGS_DIR, exist_ok=True)
     logging.basicConfig(filename='{}/{}'.format(config.LOGS_DIR, model_name), level=logging.INFO,
                         format='%(asctime)s %(message)s')
