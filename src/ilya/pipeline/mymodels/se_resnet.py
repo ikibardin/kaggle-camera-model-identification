@@ -116,7 +116,7 @@ def se_resnext50(num_classes=1000, pretrained=True):
     model = ResNeXt(SEBottleneck, 4, 32, [3, 4, 6, 3], num_classes=num_classes)
     model = nn.DataParallel(model)
     if pretrained:
-        model = load_weights_without_fc(model, 'mymodels/se_resnext50.pth')
+        model = load_weights_without_fc(model, '../../imagenet_pretrain/se_resnext50.pth')
     return model
 
 
@@ -125,7 +125,7 @@ def se_resnet50(num_classes=1000):
     model = ResNet(SEBottleneck, [3, 4, 6, 3], num_classes=num_classes)
     model.avgpool = nn.AdaptiveAvgPool2d(1)
     model = nn.DataParallel(model)
-    pretrained_weights = torch.load('mymodels/se_resnet50.pth')['state_dict']
+    pretrained_weights = torch.load('../../imagenet_pretrain/se_resnet50.pth')['state_dict']
     state_dict = model.state_dict()
     for key in state_dict.keys():
         if 'fc' in key:

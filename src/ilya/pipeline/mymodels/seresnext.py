@@ -75,7 +75,7 @@ def se_resnext50(num_classes=1000, pretrained=True):
     model = ResNeXt(SEBottleneck, 4, 32, [3, 4, 6, 3], num_classes=num_classes)
     model = nn.DataParallel(model)
     if pretrained:
-        model = load_weights_without_fc(model, 'mymodels/se_resnext50.pth')
+        model = load_weights_without_fc(model, '../../imagenet_pretrain/se_resnext50.pth')
     return model
 
 

@@ -33,10 +33,10 @@ def run_training(model_name, model, ids_train, ids_val,
     weights = [class_w[i_class] for i_class in classes_train]
     weights = torch.DoubleTensor(weights)
     train_sampler = sampler.WeightedRandomSampler(weights, steps_per_epoch * batch_size)
-    train_dataset = IEEECameraDataset(ids_train, crop_size=config.CROP_SIZE, training=True, more_feats=False, d4=use_d4)
+    train_dataset = IEEECameraDataset(ids_train, crop_size=config.CROP_SIZE, training=True, d4=use_d4)
 
-    val_dataset_unalt = ValidationDataset(ids_val, crop_size=config.CROP_SIZE, mode='unalt', more_feats=False)
-    val_dataset_manip = ValidationDataset(ids_val, crop_size=config.CROP_SIZE, mode='manip', more_feats=False)
+    val_dataset_unalt = ValidationDataset(ids_val, crop_size=config.CROP_SIZE, mode='unalt')
+    val_dataset_manip = ValidationDataset(ids_val, crop_size=config.CROP_SIZE, mode='manip')
 
     train_loader = DataLoader(train_dataset, batch_size=batch_size, sampler=train_sampler,
                               num_workers=config.NUM_WORKERS, pin_memory=True, drop_last=True)
