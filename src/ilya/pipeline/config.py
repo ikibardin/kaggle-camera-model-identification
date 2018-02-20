@@ -1,14 +1,13 @@
 import multiprocessing
 
-
 MODELS = [
-#    'densenet201_d4',
-#    'dpn92',
-#    'densenet201',
-#    'resnext101',
-#    'densenet161',
-#    'se_resnext50',
-#    'se_resnet50',
+    'densenet201_d4',
+    'dpn92',
+    'densenet201',
+    'resnext101',
+    'densenet161',
+    'se_resnext50',
+    'se_resnet50',
     'dpn98',
     'resnext101_d4'
 ]
@@ -31,7 +30,7 @@ BATCH_SIZES = {
     'densenet201_d4': 20,
     'dpn92': 24,
     'densenet201': 20,
-    'resnext101' : 14,
+    'resnext101': 14,
     'densenet161': 16,
     'se_resnext50': 28,
     'se_resnet50': 36,
