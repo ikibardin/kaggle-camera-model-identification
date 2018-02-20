@@ -28,4 +28,12 @@ BATCH_SIZES = {
     'dpn92': 12,
 }
 
+TABLES_DIR = '../../tables'
+
 CHECKPOINTS_DIR = '../../checkpoints/{}'
+
+DATASET_DIR = '../../dataset'
+
+TEST_DIR = DATASET_DIR + '/test'
+
+PSEUDO_DIR = DATASET_DIR + '/pseudo'

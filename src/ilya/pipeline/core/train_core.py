@@ -58,18 +58,18 @@ def run_training(model_name, model, ids_train, ids_val,
 
 
 def load_train_ids(use_pseudo):
-    kaggle_train_meta = pd.read_csv('../input/new_train_meta.csv')
+    kaggle_train_meta = pd.read_csv(config.TABLES_DIR + '/kaggle_train_meta.csv')
     kaggle_train_meta = kaggle_train_meta[kaggle_train_meta['fold_id'] != 0]
-    ids_train = list(pd.read_csv('../input/cleaner.csv')['fns']) \
+    ids_train = list(pd.read_csv(config.TABLES_DIR + '/cleaner.csv')['fns']) \
                 + list(kaggle_train_meta['filename'])
     if use_pseudo:
-        pseudo = pd.read_csv('../input/pseudo.csv')['fname']
+        pseudo = pd.read_csv(config.TABLES_DIR + '/pseudo.csv')['fname']
         ids_train += list(pseudo)
     return ids_train
 
 
 def load_valid_ids():
-    return pd.read_csv('../input/last_day_val.csv')['filename']
+    return pd.read_csv(config.TABLES_DIR + '/last_day_val.csv')['filename']
 
 
 def log_config(use_d4):
@@ -83,6 +83,9 @@ def train_model(model_name, use_pseudo):
     seed = 42
     np.random.seed(seed)
     random.seed(seed)
+    batch_size = config.BATCH_SIZES[model_name]
+    if use_pseudo:
+        model_name += '_pseudo'
     os.makedirs(config.LOGS_DIR, exist_ok=True)
     logging.basicConfig(filename='{}/{}'.format(config.LOGS_DIR, model_name), level=logging.INFO,
                         format='%(asctime)s %(message)s')
