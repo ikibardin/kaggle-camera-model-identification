@@ -6,11 +6,14 @@ competition
 and 1st place among student eligible
 teams).
 
+Should any questions arise regarding the solution, please do not hesitate to contact me
+on [Telegram](https://t.me/ikibardin) or via e-mail `ikibardin@gmail.com`
+
 ## Requirements
 To train models and get predictions the following is required:
 
 - OS: Ubuntu 16.04
-- Python 3.5
+- Python 3.6
 - Hardware:
     - Any decent modern computer with x86-64 CPU, 
     - 32 GB RAM
