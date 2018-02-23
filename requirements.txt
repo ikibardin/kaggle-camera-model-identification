@@ -1,0 +1,14 @@
+jpeg4py==0.1.2
+pandas==0.20.3
+numpy==1.13.3
+scikit_image==0.13.1
+opencv_python==3.3.0.10
+tqdm==4.19.4
+scipy==0.19.1
+torch==0.2.0.post3
+Pillow==5.0.0
+skimage==0.0
+scikit_learn==0.19.1
+beautifulsoup4==4.6.0
+httplib2==0.10.3
+ImageHash==4.0
