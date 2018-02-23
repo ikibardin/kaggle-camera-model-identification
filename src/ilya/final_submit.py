@@ -28,7 +28,7 @@ def main():
         'fname': final_proba['fname'],
         'camera': cameras
     })
-    submission.to_csv(args.output, index=False)
+    submission.to_csv('../../' + args.output, index=False)
     print('Final submission saved to {}'.format(args.output))
 
 

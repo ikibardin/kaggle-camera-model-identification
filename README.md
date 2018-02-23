@@ -31,14 +31,33 @@ Place additional validation images to `data/val_images`.
     
 ## Producing the final submission
 Run `bash final_submit.sh -d <folder with test images> -o <output .csv filename>`
+
+## Training ensemble from scratch
+This section describes the steps required to train our ensemble.
     
-## Downloading external dataset
-???
+### 1. Download external dataset
+Images from both Yandex.Fotki and Flickr are essential for reproducing our solution.
 
-## Filtering external dataset
-???
+#### Downloading images from Yandex.Fotki
+Run `bash download_from_yandex.sh`
 
-## Training the ensemble
+#### Downloading images from Flickr
+Unfortunately, this step involves some manual actions.
+1. cd into `downloader/flickr`
+2. For every model go to the telephone model group page from `flickr_groups.txt`. Scroll every gallery
+page to the end and download as html file to the corresponding folder. As a result you
+will have a set of folders with .html files corresponding to a specific phone model
+at `html_pages` folder.
+3. Run `python pages_to_image_links.py`. The result of the script will be
+folder `links` of .csv files with links to photos of each phone model.
+4. Run `python download_from_links.py` to download images from the links received in
+the previous paragraph (previous two steps could be skipped, because the
+`links` folder already contains necessary files).
+
+### 2. Filter external dataset
+Run `bash filter.sh`
+
+### 3. Train the ensemble
 1. Download and filter external dataset as described above.
 2. Run `bash init_train.sh` to train 9 models.
 3. Run `bash make_pseudo.sh` to get predictions from these models for images at `data/test` and 

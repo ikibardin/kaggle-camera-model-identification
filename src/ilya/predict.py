@@ -37,7 +37,7 @@ def main():
         'fname': proba_df['fname'],
         'camera': cameras
     })
-    predictions_df.to_csv(args.output, index=False)
+    predictions_df.to_csv('../../' + args.output, index=False)
     print('Submission saved to {}'.format(args.output))
 
 

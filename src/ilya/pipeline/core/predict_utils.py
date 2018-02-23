@@ -67,20 +67,20 @@ def predict_test_proba(model, test_folder, use_tta, crop_size):
 
 
 def make_model(weights_path):
-    model_name = weights_path.split('/')[-1] #.split('_')[0]
+    model_name = weights_path.split('/')[-1]
     if model_name.startswith('densenet201'):
         model = densenet.densenet201(num_classes=len(utils.CLASSES), pretrained=True)
-    elif model_name == 'dpn92':
+    elif model_name.startswith('dpn92'):
         model = dpn.dpn92(num_classes=len(utils.CLASSES), pretrained='imagenet+5k')
     elif model_name.startswith('resnext101'):
         model = resnext.resnext101_32x4d(num_classes=len(utils.CLASSES), pretrained='imagenet')
-    elif model_name == 'densenet161':
+    elif model_name.startswith('densenet161'):
         model = densenet.densenet161(num_classes=len(utils.CLASSES), pretrained=True)
-    elif model_name == 'dpn98':
+    elif model_name.startswith('dpn98'):
         model = dpn.dpn98(num_classes=len(utils.CLASSES), pretrained='imagenet')
-    elif model_name.startswith('se_resnet50'):  # FIXME Add imagenet pretrained weights
+    elif model_name.startswith('se_resnet50'):
         model = se_resnet.se_resnet50(num_classes=len(utils.CLASSES)).cuda()
-    elif model_name == 'se_resnext50':  # FIXME Add imagenet pretrained weights
+    elif model_name.startswith('se_resnext50'):
         model = seresnext.se_resnext50(num_classes=len(utils.CLASSES), pretrained=True).cuda()
     else:
         raise RuntimeError('Unknown model name: {}'.format(model_name))
