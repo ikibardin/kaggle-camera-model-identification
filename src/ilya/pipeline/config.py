@@ -1,15 +1,15 @@
 import multiprocessing
 
 MODELS = [
-#    'densenet201_d4',
-#    'dpn92',
-#    'densenet201',
-#    'resnext101',
-#    'densenet161',
-#    'se_resnext50',
+    'densenet201_d4',
+    'dpn92',
+    'densenet201',
+    'resnext101',
+    'densenet161',
+    'se_resnext50',
     'se_resnet50',
-#    'dpn98',
- #   'resnext101_d4'
+    'dpn98',
+    'resnext101_d4'
 ]
 
 CROP_SIZE = 480
@@ -27,15 +27,15 @@ INIT_CYCLIC_LR = 1e-3
 CYCLE_LEN = 10
 
 BATCH_SIZES = {
-    'densenet201_d4': 20,
-    'dpn92': 24,
-    'densenet201': 20,
-    'resnext101': 14,
-    'densenet161': 16,
-    'se_resnext50': 28,
-    'se_resnet50': 32,
-    'dpn98': 16,
-    'resnext101_d4': 14
+    'densenet201_d4': 40,
+    'dpn92': 48,
+    'densenet201': 40,
+    'resnext101': 28,
+    'densenet161': 32,
+    'se_resnext50': 56,
+    'se_resnet50': 64,
+    'dpn98': 32,
+    'resnext101_d4': 28
 }
 
 TABLES_DIR = '../../tables'
