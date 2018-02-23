@@ -58,10 +58,6 @@ def move_pseudo_to_separate_folder(pseudo_proba_df):
 
 
 def main():
-    #parser = argparse.ArgumentParser()
-    #parser.add_argument('-d', '--dir', type=str, help='Directory with test images')
-    #args = parser.parse_args()
-
     checkpoints_paths = get_weights_for_pseudo_labeling()
     print('Loaded {} checkpoints:\n{}\n'.format(len(checkpoints_paths), checkpoints_paths))
     print('Generating proba for pseudo labeling for test directory at {}'.format(config.TEST_DIR))
