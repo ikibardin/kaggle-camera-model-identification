@@ -69,7 +69,7 @@ def load_train_ids(use_pseudo):
 
 
 def load_valid_ids():
-    return pd.read_csv(config.TABLES_DIR + '/last_day_val.csv')['filename']
+    return pd.read_csv(config.TABLES_DIR + '/val.csv')['filename']
 
 
 def log_config(use_d4):
@@ -95,4 +95,4 @@ def train_model(model_name, use_pseudo):
 
     use_d4 = 'd4' in model_name
     log_config(use_d4)
-    run_training(model_name, model, ids_train, ids_val, config.BATCH_SIZES[model_name], config.STEPS, use_d4)
+    run_training(model_name, model, ids_train, ids_val, batch_size, config.STEPS, use_d4)

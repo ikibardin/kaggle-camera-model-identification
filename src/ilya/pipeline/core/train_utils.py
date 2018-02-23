@@ -168,7 +168,7 @@ def make_model(model_name):
         model = densenet.densenet161(num_classes=len(utils.CLASSES), pretrained=True)
     elif model_name == 'dpn98':
         model = dpn.dpn98(num_classes=len(utils.CLASSES), pretrained='imagenet')
-    elif model_name == 'se_resnet50':  # FIXME Add imagenet pretrained weights
+    elif model_name.startswith('se_resnet50'):  # FIXME Add imagenet pretrained weights
         model = se_resnet.se_resnet50(num_classes=len(utils.CLASSES)).cuda()
         return model
     elif model_name == 'se_resnext50':  # FIXME Add imagenet pretrained weights

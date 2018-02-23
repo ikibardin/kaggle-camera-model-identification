@@ -44,8 +44,10 @@ def get_batches(img_path, use_tta, crop_size):
 
 
 def predict_test_proba(model, test_folder, use_tta, crop_size):
-    ids = glob.glob(os.path.join('../../' + test_folder, '*.tif'))
+    print(test_folder)
+    ids = glob.glob(os.path.join(test_folder, '*.tif'))
     ids.sort()
+    # print('IDS: ', ids)
     model.eval()
     preds = None
     names = []
@@ -65,7 +67,7 @@ def predict_test_proba(model, test_folder, use_tta, crop_size):
 
 
 def make_model(weights_path):
-    model_name = weights_path.split('/')[-1].split('_')[0]
+    model_name = weights_path.split('/')[-1] #.split('_')[0]
     if model_name.startswith('densenet201'):
         model = densenet.densenet201(num_classes=len(utils.CLASSES), pretrained=True)
     elif model_name == 'dpn92':
@@ -76,13 +78,13 @@ def make_model(weights_path):
         model = densenet.densenet161(num_classes=len(utils.CLASSES), pretrained=True)
     elif model_name == 'dpn98':
         model = dpn.dpn98(num_classes=len(utils.CLASSES), pretrained='imagenet')
-    elif model_name == 'se_resnet50':  # FIXME Add imagenet pretrained weights
+    elif model_name.startswith('se_resnet50'):  # FIXME Add imagenet pretrained weights
         model = se_resnet.se_resnet50(num_classes=len(utils.CLASSES)).cuda()
     elif model_name == 'se_resnext50':  # FIXME Add imagenet pretrained weights
         model = seresnext.se_resnext50(num_classes=len(utils.CLASSES), pretrained=True).cuda()
     else:
         raise RuntimeError('Unknown model name: {}'.format(model_name))
-    if model_name != 'se_resnet50' and model_name != 'se_resnext50':
+    if not model_name.startswith('se_resnet50') and not model_name.startswith('se_resnext50'):
         model = nn.DataParallel(model).cuda()
     state_dict = torch.load(weights_path)['state_dict']
     model.load_state_dict(state_dict)
