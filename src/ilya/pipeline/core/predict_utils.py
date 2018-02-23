@@ -47,7 +47,6 @@ def predict_test_proba(model, test_folder, use_tta, crop_size):
     print(test_folder)
     ids = glob.glob(os.path.join(test_folder, '*.tif'))
     ids.sort()
-    # print('IDS: ', ids)
     model.eval()
     preds = None
     names = []

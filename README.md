@@ -1,7 +1,9 @@
 # Kaggle IEEE's Signal Processing Society - Camera Model Identification
 
 Implementation of camera model identification system by team "[ods.ai] GPU_muscles" (2nd place overall in Kaggle
-competition "IEEE's Signal Processing Society - Camera Model Identification" and 1st place among student eligible
+competition
+[IEEE's Signal Processing Society - Camera Model Identification](https://www.kaggle.com/c/sp-society-camera-model-identification/leaderboard)
+and 1st place among student eligible
 teams).
 
 ## Requirements

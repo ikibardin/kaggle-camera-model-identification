@@ -33,7 +33,7 @@ def main():
     checkpoints_paths = get_weights_for_final_prediction()
     print('Loaded {} checkpoints'.format(len(checkpoints_paths)))
     print('Generating proba for test directory at {}'.format(args.dir))
-    proba_df = predict_utils.predict_gmean_ensemble(checkpoints_paths, args.dir)
+    proba_df = predict_utils.predict_gmean_ensemble(checkpoints_paths, '../../' + args.dir)
     cameras = proba_df.drop('fname', axis=1).idxmax(axis=1)
     predictions_df = pd.DataFrame({
         'fname': proba_df['fname'],
