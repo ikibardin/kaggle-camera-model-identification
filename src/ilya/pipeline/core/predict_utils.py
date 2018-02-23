@@ -12,7 +12,7 @@ from tqdm import tqdm
 from . import utils
 from . import train_utils
 from .mytransforms import five_crop
-from ..mymodels import densenet, dpn
+from ..mymodels import densenet, dpn, resnext, se_resnet, seresnext
 
 
 def get_batches(img_path, use_tta, crop_size):
@@ -66,13 +66,24 @@ def predict_test_proba(model, test_folder, use_tta, crop_size):
 
 def make_model(weights_path):
     model_name = weights_path.split('/')[-1].split('_')[0]
-    if model_name == 'densenet161':
-        model = densenet.densenet161(num_classes=len(utils.CLASSES), pretrained=False)
+    if model_name.startswith('densenet201'):
+        model = densenet.densenet201(num_classes=len(utils.CLASSES), pretrained=True)
     elif model_name == 'dpn92':
-        model = dpn.dpn92(num_classes=len(utils.CLASSES), pretrained=None)
+        model = dpn.dpn92(num_classes=len(utils.CLASSES), pretrained='imagenet+5k')
+    elif model_name.startswith('resnext101'):
+        model = resnext.resnext101_32x4d(num_classes=len(utils.CLASSES), pretrained='imagenet')
+    elif model_name == 'densenet161':
+        model = densenet.densenet161(num_classes=len(utils.CLASSES), pretrained=True)
+    elif model_name == 'dpn98':
+        model = dpn.dpn98(num_classes=len(utils.CLASSES), pretrained='imagenet')
+    elif model_name == 'se_resnet50':  # FIXME Add imagenet pretrained weights
+        model = se_resnet.se_resnet50(num_classes=len(utils.CLASSES)).cuda()
+    elif model_name == 'se_resnext50':  # FIXME Add imagenet pretrained weights
+        model = seresnext.se_resnext50(num_classes=len(utils.CLASSES), pretrained=True).cuda()
     else:
-        raise RuntimeError('Unknown model')
-    model = nn.DataParallel(model).cuda()
+        raise RuntimeError('Unknown model name: {}'.format(model_name))
+    if model_name != 'se_resnet50' and model_name != 'se_resnext50':
+        model = nn.DataParallel(model).cuda()
     state_dict = torch.load(weights_path)['state_dict']
     model.load_state_dict(state_dict)
     return model

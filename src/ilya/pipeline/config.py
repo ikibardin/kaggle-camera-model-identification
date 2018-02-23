@@ -42,7 +42,7 @@ TABLES_DIR = '../../tables'
 
 CHECKPOINTS_DIR = '../../checkpoints/{}'
 
-DATASET_DIR = '../../dataset'
+DATASET_DIR = '../../data'
 
 TEST_DIR = DATASET_DIR + '/test'
 
