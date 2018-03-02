@@ -9,6 +9,14 @@ teams).
 Should any questions arise regarding the solution, please do not hesitate to contact me
 on [Telegram](https://t.me/ikibardin) or via e-mail `ikibardin@gmail.com`
 
+## Our team:
+Ilya Kibardin 		@ikibardin
+Artur Fattakhov 	@fartuk1
+Artur Kuzin			@n01z3
+Valeriy Babushkin	@venheads
+Andrey Kiselev		@akiselev
+
+
 ## Requirements
 To train models and get predictions the following is required:
 
