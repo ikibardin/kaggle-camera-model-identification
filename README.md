@@ -9,6 +9,13 @@ teams).
 Should any questions arise regarding the solution, please do not hesitate to contact me
 on [Telegram](https://t.me/ikibardin) or via e-mail `ikibardin@gmail.com`
 
+## Our team
+- Artur Kuzin [[linkedin]](https://www.linkedin.com/in/artur-kuzin-75a48838/)
+- Valeriy Babushkin [[linkedin]](https://www.linkedin.com/in/venheads/)
+- Artur Fattakhov [[kaggle]](https://www.kaggle.com/fartuk1)
+- Ilya Kibardin [[linkedin]](https://www.linkedin.com/in/ikibardin/)
+- Andrey Kiselev [[linkedin]](https://www.linkedin.com/in/andrey-kiselev-9a4ba696/)
+
 ## Requirements
 To train models and get predictions the following is required:
 
